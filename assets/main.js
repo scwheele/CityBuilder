@@ -7,20 +7,25 @@ var levels = new Map();
 var ticks = 0;
 var msgTimeout;
 
+// clears message after specified amount of time
 function clearMessage() {
-    document.getElementById('messages').innerHTML = "";
+    let messageBox = document.getElementById('messages');
+    messageBox.style.display = "none";
+    messageBox.innerHTML = "";
 }
 
+// adds message to the counter
 function addMessage(message) {
     clearInterval(msgTimeout);
-    document.getElementById('messages').innerHTML = message;
+    let messageBox = document.getElementById('messages');
+    messageBox.innerHTML = message;
+    messageBox.style.display = "initial";
     msgTimeout = setTimeout(clearMessage, 3000);
 }
 
+// updates game object when the button is clicked
 function updateObject(name) {
     if(name != null) {
-        console.log(name);
-        console.log(levels.get(name));
         if(levels.get(name) == null) {
             return console.error('Game object does not exist');
         }
@@ -29,21 +34,22 @@ function updateObject(name) {
 
         if(level.unlocked == false) {
             var neededCash = (level.cps * 10);
-            console.log("Needed cash: ", neededCash);
             if(game.totalCash >= neededCash) {
                 level.unlocked = true;
                 document.getElementById(level.name + '-upgrade-button').innerHTML = "Upgrade";
+                document.getElementById(level.name + "-attrib-unlocked").innerHTML = "unlocked: " + level.unlocked;
                 game.totalCash = game.totalCash - neededCash;
             }else{
                 addMessage("You don't have enough cash for that. Amount needed: " + neededCash + "!");
             }
         }else{
             var neededCash = (level.cps * 5);
-            console.log("Needed cash: ", neededCash);
             if(game.totalCash >= neededCash) {
                 level.level++;
                 level.cps = (level.baseCPS * level.level);
                 game.totalCash = game.totalCash - neededCash;
+                document.getElementById(level.name + "-attrib-cps").innerHTML = "cps: " + level.cps;
+                document.getElementById(level.name + "-attrib-level").innerHTML = "level: " + level.level;
             }else{
                 addMessage("You don't have enough cash for that. Amount needed: " + neededCash + "!");
             }
@@ -54,31 +60,32 @@ function updateObject(name) {
     }
 }
 
+// primary game loop
 function gameLoop() {
+    // tick counter
     ticks++;
     document.getElementById('ticks').innerHTML = ticks;
 
+    // iterate through each unlocked level and increase game cash and current cash/sec
     levels.forEach(level => {
         if(level.unlocked) {
             let cps = (level.baseCPS * level.level);
             game.totalCash += cps;
             game.currentCPS += cps;
-
-            document.getElementById(level.name + "-attrib-cps").innerHTML = "cps: " + cps;
-            document.getElementById(level.name + "-attrib-level").innerHTML = "level: " + level.level;
-            document.getElementById(level.name + "-attrib-unlocked").innerHTML = "unlocked: " + level.unlocked;
         }
     })
 
+    // update DOM with new values
     document.getElementById('totalCash').innerHTML = game.totalCash;
     document.getElementById('cps').innerHTML = game.currentCPS;
 
+    // reset game CPS counter to prevent incrementing
     game.currentCPS = 0;
 }
 
 function main() {
     // create levels
-    levels.set('Cave', { name: 'Cave', level: 1, cps: 1, baseCPS: 1, unlocked: false });
+    levels.set('Cave', { name: 'Cave', level: 1, cps: 1, baseCPS: 1, unlocked: false, });
     levels.set('Hut', { name: 'Hut', level: 1, cps: 5, baseCPS: 5, unlocked: false });
     levels.set('Cabin', { name: 'Cabin', level: 1, cps: 10, baseCPS: 10, unlocked: false });
     levels.set('Apartment', { name: 'Apartment', level: 1, cps: 20, baseCPS: 20, unlocked: false });
@@ -93,8 +100,9 @@ function main() {
     levels.forEach(level => {
         
         var container = document.getElementById('container');
-        var newSection = document.createElement("section");
+        var newSection = document.createElement("div");
         newSection.setAttribute('id', level.name);
+        newSection.setAttribute('class', "game-item");
 
         var newUL = document.createElement("ul");
         newUL.setAttribute('id', level.name + "-attrib-list");

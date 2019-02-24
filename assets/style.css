@@ -2,21 +2,30 @@ body {
     width: 100%;
     margin: 0;
     padding: 0;
-}
-#container {
-    width: 80%;
-    border-right: solid 1px red;
-    float: left;
+    font-family: 'Roboto', sans-serif;
 }
 
-section {
-    width: 100%;
-    border: solid 1px green;
+#container {
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 10px;
 }
 
 #messages {
-    width: 18%;
-    float: right;
-    color: red;
-    font-weight: bold;
+    max-width: 50%;
+    color: white;
+    background-color: grey;
+    padding: 10px;
+    position: absolute;
+    top: 0;
+    margin: auto;
+    display: none;
+}
+
+.game-item {
+    width: 20%;
+    border: solid 1px green;
+    margin: 10px;
 }
