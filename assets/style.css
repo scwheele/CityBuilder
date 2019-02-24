@@ -25,7 +25,17 @@ body {
 }
 
 .game-item {
-    width: 20%;
+    min-width: 33%;
     border: solid 1px green;
     margin: 10px;
+    font-size: 4vw;
+}
+
+.game-item ul {
+    margin: 0;
+    padding: 5;
+}
+
+.game-item li {
+    list-style-type: none;
 }
