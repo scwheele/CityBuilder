@@ -6,10 +6,17 @@ body {
 #container {
     width: 80%;
     border-right: solid 1px red;
+    float: left;
 }
 
 section {
-    height: 100px;
     width: 100%;
     border: solid 1px green;
+}
+
+#messages {
+    width: 18%;
+    float: right;
+    color: red;
+    font-weight: bold;
 }
