@@ -15,10 +15,11 @@ function gameLoop() {
         if(level.unlocked) {
             let cps = (level.cps * level.level);
             game.totalCash += cps;
-            game.currentCPS += level.cps;
+            game.currentCPS += cps;
 
             document.getElementById(level.name + "-attrib-cps").innerHTML = "cps: " + cps;
-
+            document.getElementById(level.name + "-attrib-level").innerHTML = "level: " + level.level;
+            document.getElementById(level.name + "-attrib-unlocked").innerHTML = "unlocked: " + level.unlocked;
         }
     })
 
