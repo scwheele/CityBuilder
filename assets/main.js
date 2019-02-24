@@ -1,5 +1,6 @@
 var game = {
     totalCash: 0,
+    currentCPS: 0
 }
 
 var levels = new Map();
@@ -9,6 +10,22 @@ var ticks = 0;
 function gameLoop() {
     ticks++;
     document.getElementById('ticks').innerHTML = ticks;
+
+    levels.forEach(level => {
+        if(level.unlocked) {
+            let cps = (level.cps * level.level);
+            game.totalCash += cps;
+            game.currentCPS += level.cps;
+
+            document.getElementById(level.name + "-attrib-cps").innerHTML = "cps: " + cps;
+
+        }
+    })
+
+    document.getElementById('totalCash').innerHTML = game.totalCash;
+    document.getElementById('cps').innerHTML = game.currentCPS;
+
+    game.currentCPS = 0;
 }
 
 function main() {
@@ -39,14 +56,14 @@ function main() {
             var node = document.createElement("li");
             var textNode = document.createTextNode(attrib + ": " + level[attrib]);
             node.appendChild(textNode);
-
+            node.setAttribute('id', (level.name + "-attrib-" + attrib));
             newUL.appendChild(node);
         }
         container.appendChild(newSection);
     });
     
     // initialize the game loop
-    setInterval(gameLoop, 100); 
+    setInterval(gameLoop, 1000); 
 }
 
 main();
